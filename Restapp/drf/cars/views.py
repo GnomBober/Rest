@@ -1,16 +1,29 @@
 from django.shortcuts import render
 from rest_framework import generics, viewsets
 from django.forms.models import model_to_dict
-
+from rest_framework.decorators import action
 from .apps import CarsConfig
-from .models import Car
+from .models import Car, Category
 from .serializers import CarSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 class CarsViewSet(viewsets.ModelViewSet):
-    queryset = Car.objects.all()
+    # queryset = Car.objects.all()
     serializer_class = CarSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get("pk")
+
+        if not pk:
+            return Car.odjects.all()[:3]
+
+        return Car.objects.filter(pk = pk)
+
+    @action(methods = ['get'], detail = False)
+    def category(self, request, pk = None):
+        cats = Category.objects.get(pk = pk)
+        return Response({'cats': cats.name})
 
 # class CarsAPIView(generics.ListAPIView):
 #     queryset = Car.objects.all()
