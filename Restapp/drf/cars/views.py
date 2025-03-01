@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from django.forms.models import model_to_dict
 
 from .apps import CarsConfig
@@ -8,21 +8,25 @@ from .serializers import CarSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+class CarsViewSet(viewsets.ModelViewSet):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+
 # class CarsAPIView(generics.ListAPIView):
 #     queryset = Car.objects.all()
 #     serializer_class = CarSerializer
 
-class CarsAPIList(generics.ListCreateAPIView):
-    queryset = Car.objects.all()
-    serializer_class = CarSerializer
-
-class CarsAPIUpdate(generics.UpdateAPIView):
-    queryset = Car.objects.all()
-    serializer_class = CarSerializer
-
-class CarsAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Car.objects.all()
-    serializer_class = CarSerializer
+# class CarsAPIList(generics.ListCreateAPIView):
+#     queryset = Car.objects.all()
+#     serializer_class = CarSerializer
+#
+# class CarsAPIUpdate(generics.UpdateAPIView):
+#     queryset = Car.objects.all()
+#     serializer_class = CarSerializer
+#
+# class CarsAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Car.objects.all()
+#     serializer_class = CarSerializer
 
 # class CarsAPIView(APIView):
 #     def get(self, request):
