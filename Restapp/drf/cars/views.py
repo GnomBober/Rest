@@ -16,38 +16,46 @@ class CarsAPIList(generics.ListCreateAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
 
-class CarsAPIView(APIView):
-    def get(self, request):
-        c = Car.objects.all()
-        return Response({'posts': CarSerializer(c, many = True).data})
+class CarsAPIUpdate(generics.UpdateAPIView):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
 
-    def post(self, request):
-        serializer = CarSerializer(data = request.data)
-        serializer.is_valid(raise_execption = True)
-        serializer.save()
+class CarsAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
 
-        return Response({'post': serializer.data})
-
-    def put(self, request, *args, **kwargs):
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Method PUT not allowed"})
-
-        try:
-            instance = Car.objects.get(pk = pk)
-        except:
-            return  Response({"error": "Method PUT not allowed"})
-
-        serializer = CarSerializer(data = request.data, instance = instance)
-        serializer.is_valid(raise_exception = True)
-        serializer.save()
-        return Response({"post": serializer.data})
-
-    def delete(self, request, *args, **kwargs):
-        pk = kwargs.get("pk", None)
-        if not pk:
-            return Response({"error": "Method DELETE not allowed"})
-
-        #управление записями с переданным pk
-
-        return Response({"post": "delete post" + str(pk)})
+# class CarsAPIView(APIView):
+#     def get(self, request):
+#         c = Car.objects.all()
+#         return Response({'posts': CarSerializer(c, many = True).data})
+#
+#     def post(self, request):
+#         serializer = CarSerializer(data = request.data)
+#         serializer.is_valid(raise_execption = True)
+#         serializer.save()
+#
+#         return Response({'post': serializer.data})
+#
+#     def put(self, request, *args, **kwargs):
+#         pk = kwargs.get("pk", None)
+#         if not pk:
+#             return Response({"error": "Method PUT not allowed"})
+#
+#         try:
+#             instance = Car.objects.get(pk = pk)
+#         except:
+#             return  Response({"error": "Method PUT not allowed"})
+#
+#         serializer = CarSerializer(data = request.data, instance = instance)
+#         serializer.is_valid(raise_exception = True)
+#         serializer.save()
+#         return Response({"post": serializer.data})
+#
+#     def delete(self, request, *args, **kwargs):
+#         pk = kwargs.get("pk", None)
+#         if not pk:
+#             return Response({"error": "Method DELETE not allowed"})
+#
+#         #управление записями с переданным pk
+#
+#         return Response({"post": "delete post" + str(pk)})
