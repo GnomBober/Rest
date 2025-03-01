@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from rest_framework import generics
 from django.forms.models import model_to_dict
+
+from .apps import CarsConfig
 from .models import Car
 from .serializers import CarSerializer
 from rest_framework.response import Response
@@ -17,11 +19,30 @@ class CarsAPIView(generics.ListAPIView):
     def post(self, request):
         serializer = CarSerializer(data = request.data)
         serializer.is_valid(raise_execption = True)
+        serializer.save()
 
-        post_new = Car.objects.create(
-            title = request.data['title'],
-            content = request.data['content'],
-            cat_id = request.data['cat_id']
-        )
+        return Response({'post': serializer.data})
 
-        return Response({'post': model_to_dict(post_new).data})
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get("pk", None)
+        if not pk:
+            return Response({"error": "Method PUT not allowed"})
+
+        try:
+            instance = Car.objects.get(pk = pk)
+        except:
+            return  Response({"error": "Method PUT not allowed"})
+
+        serializer = CarSerializer(data = request.data, instance = instance)
+        serializer.is_valid(raise_exception = True)
+        serializer.save()
+        return Response({"post": serializer.data})
+
+    def delete(self, request, *args, **kwargs):
+        pk = kwargs.get("pk", None)
+        if not pk:
+            return Response({"error": "Method DELETE not allowed"})
+
+        #управление записями с переданным pk
+
+        return Response({"post": "delete post" + str(pk)})
