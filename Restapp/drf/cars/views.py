@@ -6,14 +6,19 @@ from .apps import CarsConfig
 from .models import Car
 from .serializers import CarSerializer
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 # class CarsAPIView(generics.ListAPIView):
 #     queryset = Car.objects.all()
 #     serializer_class = CarSerializer
 
-class CarsAPIView(generics.ListAPIView):
+class CarsAPIList(generics.ListCreateAPIView):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+
+class CarsAPIView(APIView):
     def get(self, request):
-        c = Car.object.all()
+        c = Car.objects.all()
         return Response({'posts': CarSerializer(c, many = True).data})
 
     def post(self, request):
