@@ -19,28 +19,28 @@ from django.urls import path, include
 from cars.views import *
 from rest_framework import routers
 
-class MyCustomRouter(routers.SimpleRouter):
-    routes = [
-        routers.Route(
-            url=r'^{prefix}$',
-            mapping={'get': 'list'},
-            name='{basename}-list',
-            detail=False,
-            initkwargs={'suffix': 'List'}),
-        routers.Route(
-            url=r'^{prefix}/{lookup}$',
-            mapping={'get': 'retrieve'},
-            name='{basename}-detail',
-            detail=True,
-            initkwargs={'suffix': 'Detail'})
-    ]
-
-router = MyCustomRouter()
-router.register(r'cars', CarsViewSet, basename = 'cars')
+# class MyCustomRouter(routers.SimpleRouter):
+#     routes = [
+#         routers.Route(
+#             url=r'^{prefix}$',
+#             mapping={'get': 'list'},
+#             name='{basename}-list',
+#             detail=False,
+#             initkwargs={'suffix': 'List'}),
+#         routers.Route(
+#             url=r'^{prefix}/{lookup}$',
+#             mapping={'get': 'retrieve'},
+#             name='{basename}-detail',
+#             detail=True,
+#             initkwargs={'suffix': 'Detail'})
+#     ]
+#
+# router = MyCustomRouter()
+# router.register(r'cars', CarsViewSet, basename = 'cars')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include(router.urls))
-    # path('api/v1/carslist/', CarsViewSet.as_view({'get': 'list'})),
-    # path('api/v1/carslist/<int:pk>/', CarsViewSet.as_view({'put': 'update'})),
+    path('api/v1/cars/', CarsAPIList.as_view()),
+    path('api/v1/cars/<int:pk>/', CarsAPIUpdate.as_view()),
+    path('api/v1/carsdelete/<int:pk>/', CarsAPIDestroy.as_view()),
 ]

@@ -11,6 +11,8 @@ from rest_framework.parsers import JSONParser
 #         self.content = content
 
 class CarSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default = serializers.CurrentUserDefault())
+
     class Meta:
         model = Car
         fields = "__all__"
